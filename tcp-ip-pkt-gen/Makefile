@@ -36,8 +36,8 @@ all: clean build test run
 
 build: clean $(EXEC)
 
-test: $(EXEC) # TODO
-	$(EXEC)
+test: build # TODO
+	@valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all ./$(EXEC)
 
 run: $(EXEC)
 	@./$(EXEC)
@@ -48,7 +48,7 @@ clean:
 # Compile rules
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@$(MKDIR) $(@D)
-	@$(CXX) $(CXXFLAGS) -I$(INC_DIR) -MMD -MP -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -I$(INC_DIR) -O0 -MMD -MP -c $< -o $@
 
 $(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
 	@$(MKDIR) $(@D)

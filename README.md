@@ -34,9 +34,7 @@ The TCP/IP Packet Generator is a lightweight tool written in C++ for creating cu
 
 ## Note
 
-```
 This README assumes the existence of a command-line executable `tcp_ip_packet_generator` built from the provided C++ source code. Adjustments might be necessary based on the actual structure and implementation of your project.
-```
 
 ## Contributing
 

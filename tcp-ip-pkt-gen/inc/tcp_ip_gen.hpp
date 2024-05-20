@@ -13,19 +13,19 @@
 
 constexpr uint32_t DEFAULT_WINDOW_SIZE = 65535;
 
-uint8_t *GenerateTcpIpPacket(const uint8_t *const data, const size_t data_len,
-                             const uint32_t source_ip, const uint32_t dest_ip,
-                             const uint16_t source_port,
-                             const uint16_t dest_port) {
+auto GenerateTcpIpPacket(const uint8_t *const data, const size_t data_len,
+                         const uint32_t source_ip, const uint32_t dest_ip,
+                         const uint16_t source_port, const uint16_t dest_port) {
   std::unique_ptr<uint8_t[]> packet;
 
   if (!data || !data_len || !source_ip || !dest_ip || !source_port ||
       !dest_port) {
-    return packet.get();
+    return packet;
   }
 
   const auto packet_size = sizeof(ip) + sizeof(tcphdr) + data_len;
   packet.reset(new uint8_t[packet_size]);
+  memset(packet.get(), 0, packet_size);
 
   auto *ip_header = reinterpret_cast<ip *>(packet.get());
   ip_header->ip_v = 4;
@@ -51,7 +51,7 @@ uint8_t *GenerateTcpIpPacket(const uint8_t *const data, const size_t data_len,
 
   memcpy(packet.get() + (sizeof(ip) + sizeof(tcphdr)), data, data_len);
 
-  return packet.get();
+  return packet;
 }
 
 void PrintHexBuffer(const uint8_t *const buf, const uint32_t len) {
