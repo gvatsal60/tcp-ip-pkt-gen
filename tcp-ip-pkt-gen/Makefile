@@ -15,7 +15,7 @@ TEST_DIR := test/src
 BUILD_DIR := build
 BIN_DIR := bin
 
-DEBUG_EXEC:=debugBin
+DEBUG_EXEC:=tcp_ip_packet_generator
 RELEASE_EXEC:=releaseBin
 
 # Files
@@ -48,7 +48,7 @@ clean:
 # Compile rules
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@$(MKDIR) $(@D)
-	@$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -I$(INC_DIR) -MMD -MP -c $< -o $@
 
 $(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
 	@$(MKDIR) $(@D)
