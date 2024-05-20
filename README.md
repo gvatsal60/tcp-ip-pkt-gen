@@ -1,91 +1,47 @@
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://img.shields.io/github/license/gvatsal60/CppDockerMakeTemplate)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/gvatsal60/CppDockerMakeTemplate/build.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gvatsal60_clg-lib-mgmt&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gvatsal60_clg-lib-mgmt)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-green.svg)](https://GitHub.com/gvatsal60/CppDockerMakeTemplate/graphs/commit-activity)
-[![GitHub pull-requests](https://img.shields.io/github/issues-pr/gvatsal60/CppDockerMakeTemplate.svg)](https://GitHub.com/gvatsal60/CppDockerMakeTemplate/pull/)
-[![GitHub issues](https://img.shields.io/github/issues/gvatsal60/CppDockerMakeTemplate.svg)](https://GitHub.com/gvatsal60/CppDockerMakeTemplate/issues/)
-[![GitHub forks](https://img.shields.io/github/forks/gvatsal60/CppDockerMakeTemplate.svg)](https://GitHub.com/gvatsal60/CppDockerMakeTemplate/network/)
-[![GitHub stars](https://img.shields.io/github/stars/gvatsal60/CppDockerMakeTemplate.svg)](https://GitHub.com/gvatsal60/CppDockerMakeTemplate/stargazers)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://img.shields.io/github/license/gvatsal60/tcp-ip-pkt-gen)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/gvatsal60/tcp-ip-pkt-gen/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gvatsal60_tcp-ip-pkt-gen&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gvatsal60_tcp-ip-pkt-gen)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-green.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/graphs/commit-activity)
+[![GitHub pull-requests](https://img.shields.io/github/issues-pr/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/pull/)
+[![GitHub issues](https://img.shields.io/github/issues/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/issues/)
+[![GitHub forks](https://img.shields.io/github/forks/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/network/)
+[![GitHub stars](https://img.shields.io/github/stars/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/stargazers)
 
-# CppDockerMakeTemplate
+# TCP/IP Packet Generator (C++)
 
-This repository serves as a template for setting up a development environment to run C++ code inside Docker containers using Makefiles. Whether you're working on a personal project or a team-based endeavor, this template streamlines the process of containerizing your C++ applications, making them portable and easy to manage across different environments.
+## Overview
 
-## Prerequisites
+The TCP/IP Packet Generator is a lightweight tool written in C++ for creating customized TCP/IP packets. It's designed for network testing, simulation, and educational purposes.
 
-Before getting started, ensure that you have the following prerequisites installed on your system:
+## Features
 
-- Docker: Install Docker according to the instructions for your operating system from [Docker's official website](https://www.docker.com/get-started).
-- Git: Install Git if you haven't already from [Git's official website](https://git-scm.com/downloads).
-- Make:
-  - **Linux:** If you're on a Linux system, Make might already be installed. If not, you can install it using your package manager. For example, on Ubuntu, you can install Make with the following command:
-    ```
-    sudo apt-get install make
-    ```
-  - **Windows:** For Windows users, Make is not typically installed by default. You can install it using MinGW, which provides a Unix-like environment on Windows along with a collection of GNU utilities. Follow these steps to install Make on Windows using MinGW:
-    1. Download and install MinGW from [MinGW's official website](http://www.mingw.org/).
-    2. During installation, make sure to select the option to install the "MSYS Basic System" component, which includes Make.
-    3. After installation, add the MinGW bin directory to your system's PATH environment variable. This is typically `C:\MinGW\bin`.
+- **Customization**: Easily configure packet parameters such as source and destination addresses, port numbers, protocol types, payload data, etc.
+- **Multiple Packet Types**: Supports the generation of various TCP/IP packet types including TCP, UDP, ICMP, etc.
+- **Efficiency**: Optimized for fast packet generation without compromising on accuracy.
+- **Simple Interface**: Intuitive command-line interface for easy usage.
 
-## Getting Started
+## Usage
 
-Follow these steps to get started with CppDockerMakeTemplate:
+1. Compile the source code using your preferred C++ compiler.
+2. Run the executable file with appropriate command-line arguments to specify packet parameters.
+3. Generated packets will be outputted according to the provided settings.
 
-1. **Clone the Repository:**
+## Example
 
-   ```
-   git clone https://github.com/yourusername/CppDockerMakeTemplate.git
-   cd CppDockerMakeTemplate
-   ```
+```
+./tcp_ip_packet_generator --source 192.168.1.100 --destination 10.0.0.1 --port 8080 --protocol TCP --payload "Hello, world!"
+```
 
-2. **Build the Docker Image:**
+## Note
 
-   ```
-   make build-image
-   ```
-
-3. **Inside the Docker Container:**
-   Once inside the Docker container, you'll find yourself in the `$PROJECT_NAME` directory, where the project is set up.
-
-4. **Build the Project:**
-
-   ```
-   make docker-build
-   ```
-
-5. **Run the Executable:**
-
-   ```
-   make docker-run
-   ```
-
-6. **Test the Project:**
-
-   ```
-   make docker-test
-   ```
-
-7. **Clean the Project:**
-   ```
-   make docker-clean
-   ```
-
-## Customization
-
-You can customize this template according to your project's needs. Here are some areas you might want to modify:
-
-- **Makefile:** Adjust Make configuration, add or remove source files, libraries, or dependencies as needed.
-- **Dockerfile:** Modify Dockerfile to include additional packages or tools required for your project.
-- **Source Files:** Add your source files under the `src` directory.
+```
+This README assumes the existence of a command-line executable `tcp_ip_packet_generator` built from the provided C++ source code. Adjustments might be necessary based on the actual structure and implementation of your project.
+```
 
 ## Contributing
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
+Contributions are welcome! If you have suggestions for improvements, bug fixes, or new features, feel free to submit a pull request or open an issue on the GitHub repository.
 
 ## License
 
-This project is licensed under the Apache 2.0 License. See the [LICENSE](https://www.apache.org/licenses/LICENSE-2.0) file for details.
-
-## Acknowledgments
-
-Thank you for using the CppDockerMakeTemplate. Happy coding!
+This project is licensed under the [Apache License](https://github.com/gvatsal60/tcp-ip-pkt-gen/blob/master/LICENSE).
