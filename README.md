@@ -31,6 +31,12 @@ The TCP/IP Packet Generator is a lightweight tool written in C++ for creating cu
 ```
 ./tcp_ip_packet_generator --source 192.168.1.100 --destination 10.0.0.1 --port 8080 --protocol TCP --payload "Hello, world!"
 ```
+## Debug
+
+```
+gdb ./tcp_ip_packet_generator
+set args --source 192.168.56.11 --destination 194.190.124.17 --src_port 59198 --dst_port 53 --protocol TCP --payload "Hello, world!"
+```
 
 ## Note
 

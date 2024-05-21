@@ -1,9 +1,6 @@
-#pragma once
-#ifndef TCP_IP_GEN_HPP
-#define TCP_IP_GEN_HPP
+#include "packet_gen.hpp"
 
 #include <arpa/inet.h>
-#include <netinet/in.h>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 #include <unistd.h>
@@ -11,11 +8,18 @@
 #include <cstring>
 #include <memory>
 
-constexpr uint32_t DEFAULT_WINDOW_SIZE = 65535;
-
-auto GenerateTcpIpPacket(const uint8_t *const data, const size_t data_len,
-                         const uint32_t source_ip, const uint32_t dest_ip,
-                         const uint16_t source_port, const uint16_t dest_port) {
+/// @brief
+/// @param data
+/// @param data_len
+/// @param source_ip
+/// @param dest_ip
+/// @param source_port
+/// @param dest_port
+/// @return
+std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
+    const uint8_t *const data, const size_t data_len, const uint32_t source_ip,
+    const uint32_t dest_ip, const uint16_t source_port,
+    const uint16_t dest_port) {
   std::unique_ptr<uint8_t[]> packet;
 
   if (!data || !data_len || !source_ip || !dest_ip || !source_port ||
@@ -53,18 +57,3 @@ auto GenerateTcpIpPacket(const uint8_t *const data, const size_t data_len,
 
   return packet;
 }
-
-void PrintHexBuffer(const uint8_t *const buf, const uint32_t len) {
-  size_t i = 0;
-  for (i = 0; i < len; i++) {
-    printf("0x%02x ", buf[i]);
-    if (i != 0 && ((i + 1) % 8) == 0) {
-      printf("\n");
-    }
-  }
-  if (i != 0 && (i % 8) != 0) {
-    printf("\n");
-  }
-}
-
-#endif
