@@ -11,13 +11,6 @@
 #include "utils.hpp"
 
 int main(int argc, char const* argv[]) {
-  uint32_t src_addr{};
-  uint32_t dst_addr{};
-  int src_port{};
-  int dst_port{};
-  std::string protocol{};
-  std::string payload{};
-
   constexpr int kMaxArgSupported = 13;
 
   if (argc != kMaxArgSupported) {
@@ -29,6 +22,13 @@ int main(int argc, char const* argv[]) {
               << std::endl;
     return 1;
   }
+
+  uint32_t src_addr{};
+  uint32_t dst_addr{};
+  int src_port{};
+  int dst_port{};
+  std::string protocol{};
+  std::string payload{};
 
   for (int i = 1; i < argc; i += 2) {
     const std::string arg = argv[i];
@@ -54,14 +54,16 @@ int main(int argc, char const* argv[]) {
 
   const auto pkt_gen = std::make_unique<Packet_Generator>();
 
-  const auto out_data = pkt_gen->GenerateTcpIpPacket(
-      reinterpret_cast<const uint8_t*>(payload.c_str()), payload.size(),
-      src_addr, dst_addr, src_port, dst_port);
+  const auto out_data = pkt_gen->GeneratePacket(
+      protocol, reinterpret_cast<const uint8_t*>(payload.c_str()),
+      payload.size(), src_addr, dst_addr, src_port, dst_port);
 
-  assert(out_data != nullptr);
-
-  PrintHexBuffer(out_data.get(),
-                 payload.size() + (sizeof(ip) + sizeof(tcphdr)));
+  if (NullPtrCheck(out_data.get())) {
+    PrintHexBuffer(out_data.get(),
+                   payload.size() + (sizeof(ip) + sizeof(tcphdr)));
+  } else {
+    printf("\nError: Something went wrong!!!\n");
+  }
 
   return 0;
 }

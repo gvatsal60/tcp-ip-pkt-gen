@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -std=c++14 -Wall -Wextra
+CXXFLAGS := -std=c++17 -Wall -Wextra -g
 LDFLAGS := -pthread
 
 # Commands
@@ -37,7 +37,7 @@ all: clean build test run
 build: clean $(EXEC)
 
 test: build # TODO
-	@valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all ./$(EXEC)
+	echo "TODO test target"
 
 run: $(EXEC)
 	@./$(EXEC)
@@ -48,11 +48,7 @@ clean:
 # Compile rules
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@$(MKDIR) $(@D)
-	@$(CXX) $(CXXFLAGS) -I$(INC_DIR) -g -O0 -MMD -MP -c $< -o $@
-
-$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
-	@$(MKDIR) $(@D)
-	@$(CXX) $(CXXFLAGS) -I$(SRC_DIR) -I$(TEST_DIR) -MMD -MP -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -I$(INC_DIR) -MMD -MP -c $< -o $@
 
 # Link rule
 $(EXEC): $(OBJ) $(TESTOBJ)
