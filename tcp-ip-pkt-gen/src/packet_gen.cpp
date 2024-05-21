@@ -18,7 +18,7 @@
 /// @param dest_port
 /// @return
 std::unique_ptr<uint8_t[]> Packet_Generator::GeneratePacket(
-    const std::string protocol, const uint8_t *const data,
+    const std::string &protocol, const uint8_t *const data,
     const size_t data_len, const uint32_t source_ip, const uint32_t dest_ip,
     const uint16_t source_port, const uint16_t dest_port) {
   std::unique_ptr<uint8_t[]> ret_ptr;
@@ -27,6 +27,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GeneratePacket(
     ret_ptr = GenerateTcpIpPacket(data, data_len, source_ip, dest_ip,
                                   source_port, dest_port);
   } else if (protocol == "UDP") {
+    // TODO Add functionality for UDP packet generation
   }
 
   return ret_ptr;

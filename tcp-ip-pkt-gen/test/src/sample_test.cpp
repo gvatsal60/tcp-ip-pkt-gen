@@ -19,7 +19,7 @@ class NullPtrCheckTest : public ::testing::Test {
 
 // Test case to check NullPtrCheck function with a non-null pointer
 TEST_F(NullPtrCheckTest, NonNullPtr) {
-  int* ptr = new int(42);
+  auto* ptr = new int(42);
   EXPECT_TRUE(NullPtrCheck(ptr));
   delete ptr;  // Clean up allocated memory
 }

@@ -10,7 +10,7 @@
 #include "packet_gen.hpp"
 #include "utils.hpp"
 
-int main(int argc, char const* argv[]) {
+int main(const int argc, const char* const argv[]) {
   constexpr int kMaxArgSupported = 13;
 
   if (argc != kMaxArgSupported) {
@@ -58,7 +58,7 @@ int main(int argc, char const* argv[]) {
       protocol, reinterpret_cast<const uint8_t*>(payload.c_str()),
       payload.size(), src_addr, dst_addr, src_port, dst_port);
 
-  if (NullPtrCheck(out_data.get())) {
+  if (out_data.get()) {
     PrintHexBuffer(out_data.get(),
                    payload.size() + (sizeof(ip) + sizeof(tcphdr)));
   } else {
