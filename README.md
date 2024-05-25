@@ -29,12 +29,15 @@ The TCP/IP Packet Generator is a lightweight tool written in C++ for creating cu
 ## Example
 
 ```
-./tcp_ip_packet_generator --source 192.168.56.11 --destination 194.190.124.17 --src_port 59198 --dst_port 53 --protocol TCP --payload "Hello, world!"
+./tcp_ip_pkt_gen --source 192.168.56.11 --destination 194.190.124.17 --src_port 59198 --dst_port 53 --protocol TCP --payload "Hello, world!"
 ```
+# Verification Required
+To ensure the integrity and authenticity of the packet, kindly verify its contents through the designated platform: [Decode Packet](https://hpd.gasmi.net/). This verification process is crucial for maintaining the security and reliability of the information exchanged. Thank you for your cooperation.
+
 ## Debug
 
 ```
-gdb ./tcp_ip_packet_generator
+gdb ./tcp_ip_pkt_gen
 set args --source 192.168.56.11 --destination 194.190.124.17 --src_port 59198 --dst_port 53 --protocol TCP --payload "Hello, world!"
 ```
 
