@@ -37,7 +37,7 @@ int main(const int argc, const char* const argv[]) {
       src_addr = ntohl(src_addr);
     } else if ((arg == "--destination") || (arg == "--dst")) {
       inet_pton(AF_INET, argv[i + 1], &dst_addr);
-      dst_addr = ntohl(src_addr);
+      dst_addr = ntohl(dst_addr);
     } else if (arg == "--src_port") {
       src_port = std::stoi(argv[i + 1]);
     } else if (arg == "--dst_port") {

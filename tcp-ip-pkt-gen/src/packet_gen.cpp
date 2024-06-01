@@ -10,6 +10,33 @@
 #include <memory>
 
 /**
+ * @brief Calculate checksum for a given data buffer.
+ *
+ * This function calculates the checksum for the given data buffer using the
+ * one's complement sum method.
+ *
+ * @param data Pointer to the data buffer.
+ * @param length Length of the data buffer in bytes.
+ * @return The calculated checksum value.
+ */
+uint16_t Packet_Generator::CheckSum(const uint16_t *data, size_t length) {
+  uint32_t sum = 0;
+
+  while (length > 1) {
+    sum += *data++;
+    length -= 2;
+  }
+  if (length > 0) {
+    sum += *(uint8_t *)data;
+  }
+  while (sum >> 16) {
+    sum = (sum & 0xFFFF) + (sum >> 16);
+  }
+
+  return ~sum;
+}
+
+/**
  * @brief GenerateIpHeader generates an IP header.
  *
  * This function generates an IP header with the specified parameters.
@@ -33,7 +60,7 @@ void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
   ip_header->ip_off = 0;
   ip_header->ip_ttl = 64;
   ip_header->ip_p = protocol;
-  ip_header->ip_sum = 0;
+  ip_header->ip_sum = CheckSum(reinterpret_cast<uint16_t *>(packet), sizeof(ip));
   ip_header->ip_src.s_addr = htonl(source_ip);
   ip_header->ip_dst.s_addr = htonl(dest_ip);
 }
@@ -76,7 +103,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   tcp_header->ack_seq = 0;
   tcp_header->doff = 5;
   tcp_header->window = htons(DEFAULT_WINDOW_SIZE);
-  tcp_header->th_sum = 0;
+  tcp_header->th_sum = CheckSum(reinterpret_cast<uint16_t *>(tcp_header), sizeof(tcphdr) + data_len);
 
   /* Copy data into the packet */
   memcpy(packet.get() + (sizeof(ip) + sizeof(tcphdr)), data, data_len);
@@ -119,7 +146,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
   udp_header->source = htons(source_port);
   udp_header->dest = htons(dest_port);
   udp_header->len = htons(sizeof(udphdr) + data_len);  // FIXME
-  udp_header->check = 0;
+  udp_header->check = CheckSum(reinterpret_cast<uint16_t *>(udp_header), sizeof(udphdr) + data_len);
 
   /* Copy data into the packet */
   memcpy(packet.get() + sizeof(ip) + sizeof(udphdr), data, data_len);

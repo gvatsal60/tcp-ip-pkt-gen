@@ -38,6 +38,7 @@ class Packet_Generator {
                                                  const uint32_t dest_ip,
                                                  const uint16_t source_port,
                                                  const uint16_t dest_port);
+  uint16_t CheckSum(const uint16_t *data, size_t length);
 
   /* Default window size for TCP packets. */
   const uint32_t DEFAULT_WINDOW_SIZE = 65535;
