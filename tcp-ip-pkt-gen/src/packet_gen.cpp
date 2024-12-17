@@ -60,7 +60,8 @@ void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
   ip_header->ip_off = 0;
   ip_header->ip_ttl = 64;
   ip_header->ip_p = protocol;
-  ip_header->ip_sum = CheckSum(reinterpret_cast<uint16_t *>(packet), sizeof(ip));
+  ip_header->ip_sum =
+      CheckSum(reinterpret_cast<uint16_t *>(packet), sizeof(ip));
   ip_header->ip_src.s_addr = htonl(source_ip);
   ip_header->ip_dst.s_addr = htonl(dest_ip);
 }
@@ -93,7 +94,8 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   memset(packet.get(), 0, packet_size);
 
   /* Generate IP header */
-  GenerateIpHeader(packet.get(), sizeof(tcphdr) + data_len, source_ip, dest_ip, IPPROTO_TCP);  // FIXME
+  GenerateIpHeader(packet.get(), sizeof(tcphdr) + data_len, source_ip, dest_ip,
+                   IPPROTO_TCP);  // FIXME
 
   /* Generate TCP header */
   auto *tcp_header = reinterpret_cast<tcphdr *>(packet.get() + sizeof(ip));
@@ -103,7 +105,8 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   tcp_header->ack_seq = 0;
   tcp_header->doff = 5;
   tcp_header->window = htons(DEFAULT_WINDOW_SIZE);
-  tcp_header->th_sum = CheckSum(reinterpret_cast<uint16_t *>(tcp_header), sizeof(tcphdr) + data_len);
+  tcp_header->th_sum = CheckSum(reinterpret_cast<uint16_t *>(tcp_header),
+                                sizeof(tcphdr) + data_len);
 
   /* Copy data into the packet */
   memcpy(packet.get() + (sizeof(ip) + sizeof(tcphdr)), data, data_len);
@@ -139,14 +142,16 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
   memset(packet.get(), 0, packet_size);
 
   /* Generate IP header */
-  GenerateIpHeader(packet.get(), sizeof(udphdr) + data_len, source_ip, dest_ip, IPPROTO_UDP);  // FIXME
+  GenerateIpHeader(packet.get(), sizeof(udphdr) + data_len, source_ip, dest_ip,
+                   IPPROTO_UDP);  // FIXME
 
   /* Generate UDP header */
   auto *udp_header = reinterpret_cast<udphdr *>(packet.get() + sizeof(ip));
   udp_header->source = htons(source_port);
   udp_header->dest = htons(dest_port);
   udp_header->len = htons(sizeof(udphdr) + data_len);  // FIXME
-  udp_header->check = CheckSum(reinterpret_cast<uint16_t *>(udp_header), sizeof(udphdr) + data_len);
+  udp_header->check = CheckSum(reinterpret_cast<uint16_t *>(udp_header),
+                               sizeof(udphdr) + data_len);
 
   /* Copy data into the packet */
   memcpy(packet.get() + sizeof(ip) + sizeof(udphdr), data, data_len);
