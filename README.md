@@ -1,3 +1,5 @@
+# TCP/IP Packet Generator (C++)
+
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://img.shields.io/github/license/gvatsal60/tcp-ip-pkt-gen)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/gvatsal60/tcp-ip-pkt-gen/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gvatsal60_tcp-ip-pkt-gen&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gvatsal60_tcp-ip-pkt-gen)
@@ -6,8 +8,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/issues/)
 [![GitHub forks](https://img.shields.io/github/forks/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/network/)
 [![GitHub stars](https://img.shields.io/github/stars/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/stargazers)
-
-# TCP/IP Packet Generator (C++)
 
 ## Overview
 
@@ -28,22 +28,26 @@ The TCP/IP Packet Generator is a lightweight tool written in C++ for creating cu
 
 ## Example
 
-```
+```sh
 ./tcp_ip_pkt_gen --source 192.168.56.11 --destination 194.190.124.17 --src_port 59198 --dst_port 53 --protocol TCP --payload "Hello, world!"
 ```
-# Verification Required
-To ensure the integrity and authenticity of the packet, kindly verify its contents through the designated platform: [Decode Packet](https://hpd.gasmi.net/). This verification process is crucial for maintaining the security and reliability of the information exchanged. Thank you for your cooperation.
+
+## Verification Required
+
+To ensure the integrity and authenticity of the packet, kindly verify its contents through the designated platform: [Decode Packet](https://hpd.gasmi.net/).
+This verification process is crucial for maintaining the security and reliability of the information exchanged. Thank you for your cooperation.
 
 ## Debug
 
-```
+```sh
 gdb ./tcp_ip_pkt_gen
 set args --source 192.168.56.11 --destination 194.190.124.17 --src_port 59198 --dst_port 53 --protocol TCP --payload "Hello, world!"
 ```
 
 ## Note
 
-This README assumes the existence of a command-line executable `tcp_ip_packet_generator` built from the provided C++ source code. Adjustments might be necessary based on the actual structure and implementation of your project.
+This README assumes the existence of a command-line executable `tcp_ip_packet_generator` built from the provided C++ source code.
+Adjustments might be necessary based on the actual structure and implementation of your project.
 
 ## Contributing
 

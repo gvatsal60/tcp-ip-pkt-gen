@@ -1,0 +1,46 @@
+FROM mcr.microsoft.com/devcontainers/cpp:latest AS base
+
+# Metadata indicating the maintainer of this Dockerfile
+LABEL MAINTAINER="gvatsal60"
+# Description of the purpose of this image
+LABEL DESCRIPTION="Build Environment"
+
+ARG USERNAME=vscode
+
+ARG GTEST_DEST=/opt/gtest
+
+# Install dependencies
+RUN apt-get update \
+  && apt-get -y install --no-install-recommends \
+  bear \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Install gtest from source
+FROM base AS gtest
+ARG GTEST_VER=1.15.2
+ARG GTEST_TAR_VER=v${GTEST_VER}.tar.gz
+ARG GTEST_BUILD_DIR=googletest-${GTEST_VER}/build
+ARG GTEST_SRC=/usr/local/src
+
+# Download and extract gtest source code using ADD
+ADD https://github.com/google/googletest/archive/${GTEST_TAR_VER} ${GTEST_SRC}
+
+# Extract gtest source code, build directory, compile, and install gtest
+RUN set -x \
+  && tar -xzvf ${GTEST_SRC}/${GTEST_TAR_VER} -C ${GTEST_SRC} \
+  && mkdir -p ${GTEST_SRC}/${GTEST_BUILD_DIR} \
+  && cd ${GTEST_SRC}/${GTEST_BUILD_DIR} \
+  && cmake .. \
+  && make -j$(nproc) \
+  && make install DESTDIR=${GTEST_DEST} \
+  && rm -rf ${GTEST_SRC}/${GTEST_VER}
+
+# Build Final Image
+FROM base AS build
+
+# Copy gtest binaries from the gtest stage
+COPY --from=gtest ${GTEST_DEST} /
+
+# Switch to non-root user
+USER ${USERNAME}

@@ -1,5 +1,6 @@
+# Compiler and flags
 CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -g
+CXXFLAGS := -std=c++2a -Wall -Wextra -g
 LDFLAGS := -lgtest -lgtest_main -pthread
 
 MKDIR := mkdir -p
@@ -12,8 +13,8 @@ TEST_DIR := test/src
 BUILD_DIR := build
 DEP_DIR := $(BUILD_DIR)/dep
 BIN_DIR := bin
-TARGET := tcp_ip_pkt_gen
-TEST_TARGET := test_tcp_ip_pkt_gen
+TARGET := debugBin
+TEST_TARGET := testBin
 
 SRC_EXT := cpp
 SOURCES := $(wildcard $(SRC_DIR)/*.$(SRC_EXT))
@@ -26,11 +27,23 @@ TEST_DEPS := $(patsubst $(TEST_DIR)/%,$(DEP_DIR)/%,$(TEST_SOURCES:.$(SRC_EXT)=.d
 
 CXXFLAGS += -I$(INC_DIR)
 
+.PHONY: all build test clean
+
+all: build test
+
 build: $(TARGET)
 
 test: $(TEST_TARGET)
+	@./$(BIN_DIR)/$(TEST_TARGET)
 
-all: build test
+run:
+	@./$(BIN_DIR)/$(TARGET)
+
+clean:
+	@$(RMDIR) $(BUILD_DIR) $(BIN_DIR)
+
+sonar: clean
+	@bear --output ../compile_commands.json --append -- $(MAKE) build
 
 $(TARGET): $(OBJECTS)
 	@$(MKDIR) $(BIN_DIR)
@@ -51,7 +64,3 @@ $(BUILD_DIR)/%.o: $(TEST_DIR)/%.$(SRC_EXT)
 	@$(MV_DIR) $(BUILD_DIR)/$*.d $(DEP_DIR)/$*.d
 
 -include $(DEPS) $(TEST_DEPS)
-
-.PHONY: clean
-clean:
-	@$(RMDIR) $(BUILD_DIR) $(BIN_DIR)
