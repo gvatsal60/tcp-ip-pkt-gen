@@ -1,4 +1,7 @@
 {
+  "build": {
+    "dockerfile": "../dockerfiles/Dockerfile.debug"
+  },
   "capAdd": [
     "SYS_PTRACE"
   ],
@@ -6,20 +9,26 @@
     "vscode": {
       "extensions": [
         "DavidAnson.vscode-markdownlint",
-        "EditorConfig.EditorConfig",
         "Gruntfuggly.todo-tree",
         "PKief.material-icon-theme",
         "SonarSource.sonarlint-vscode",
         "Tyriar.sort-lines",
         "bradzacher.vscode-copy-filename",
         "esbenp.prettier-vscode",
-        "foxundermoon.shell-format",
         "gurumukhi.selected-lines-count",
+        "llvm-vs-code-extensions.vscode-clangd",
         "ms-azuretools.vscode-docker",
+        "ms-vscode.cpptools",
         "streetsidesoftware.code-spell-checker",
         "usernamehw.errorlens"
       ],
       "settings": {
+        "[cpp]": {
+          "C_Cpp.autocompleteAddParentheses": true,
+          "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+          "C_Cpp.intelliSenseEngine": "default",
+          "editor.defaultFormatter": "ms-vscode.cpptools"
+        },
         "[dockercompose]": {
           "editor.autoIndent": "advanced",
           "editor.defaultFormatter": "ms-azuretools.vscode-docker",
@@ -79,9 +88,8 @@
       }
     }
   },
-  "image": "mcr.microsoft.com/devcontainers/cpp",
   "mounts": [
-    "source=${localWorkspaceFolder}/vs-snippets/snippets,target=${containerWorkspaceFolder}/.vscode,type=bind,consistency=cached,readonly"
+    "source=${localWorkspaceFolder}/snippets,target=${containerWorkspaceFolder}/.vscode,type=bind,consistency=cached,readonly"
   ],
   "postCreateCommand": "chmod +x ${containerWorkspaceFolder}/.devcontainer/postCreateScript.sh && ${containerWorkspaceFolder}/.devcontainer/postCreateScript.sh",
   "runArgs": [

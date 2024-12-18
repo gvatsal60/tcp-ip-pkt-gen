@@ -1,0 +1,36 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++2a",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-Iinc",
+      "-c",
+      "-o",
+      "build/main.o",
+      "src/main.cpp"
+    ],
+    "directory": "/tcp-ip-pkt-gen/tcp-ip-pkt-gen",
+    "file": "/tcp-ip-pkt-gen/tcp-ip-pkt-gen/src/main.cpp",
+    "output": "/tcp-ip-pkt-gen/tcp-ip-pkt-gen/build/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++2a",
+      "-Wall",
+      "-Wextra",
+      "-g",
+      "-Iinc",
+      "-c",
+      "-o",
+      "build/packet_gen.o",
+      "src/packet_gen.cpp"
+    ],
+    "directory": "/tcp-ip-pkt-gen/tcp-ip-pkt-gen",
+    "file": "/tcp-ip-pkt-gen/tcp-ip-pkt-gen/src/packet_gen.cpp",
+    "output": "/tcp-ip-pkt-gen/tcp-ip-pkt-gen/build/packet_gen.o"
+  }
+]
