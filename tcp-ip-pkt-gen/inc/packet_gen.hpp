@@ -13,31 +13,28 @@
  * protocols.
  */
 class Packet_Generator {
- public:
+public:
   Packet_Generator() = default;
   ~Packet_Generator() = default;
 
-  std::unique_ptr<uint8_t[]> GeneratePacket(
-      const std::string_view protocol, const uint8_t *const data,
-      const size_t data_len, const uint32_t source_ip, const uint32_t dest_ip,
-      const uint16_t source_port, const uint16_t dest_port);
+  std::unique_ptr<uint8_t[]>
+  GeneratePacket(const std::string_view protocol, const uint8_t *const data,
+                 const size_t data_len, const uint32_t source_ip,
+                 const uint32_t dest_ip, const uint16_t source_port,
+                 const uint16_t dest_port);
 
- private:
+private:
   void GenerateIpHeader(uint8_t *const packet, const uint32_t data_len,
                         const uint32_t source_ip, const uint32_t dest_ip,
                         const uint16_t protocol);
-  std::unique_ptr<uint8_t[]> GenerateTcpIpPacket(const uint8_t *const data,
-                                                 const size_t data_len,
-                                                 const uint32_t source_ip,
-                                                 const uint32_t dest_ip,
-                                                 const uint16_t source_port,
-                                                 const uint16_t dest_port);
-  std::unique_ptr<uint8_t[]> GenerateUdpIpPacket(const uint8_t *const data,
-                                                 const size_t data_len,
-                                                 const uint32_t source_ip,
-                                                 const uint32_t dest_ip,
-                                                 const uint16_t source_port,
-                                                 const uint16_t dest_port);
+  std::unique_ptr<uint8_t[]>
+  GenerateTcpIpPacket(const uint8_t *const data, const size_t data_len,
+                      const uint32_t source_ip, const uint32_t dest_ip,
+                      const uint16_t source_port, const uint16_t dest_port);
+  std::unique_ptr<uint8_t[]>
+  GenerateUdpIpPacket(const uint8_t *const data, const size_t data_len,
+                      const uint32_t source_ip, const uint32_t dest_ip,
+                      const uint16_t source_port, const uint16_t dest_port);
   uint16_t CheckSum(const uint16_t *data, size_t length);
 
   /* Default window size for TCP packets. */

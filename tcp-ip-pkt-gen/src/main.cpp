@@ -10,7 +10,7 @@
 #include "packet_gen.hpp"
 #include "utils.hpp"
 
-int main(const int argc, const char* const argv[]) {
+int main(const int argc, const char *const argv[]) {
   constexpr int kMaxArgSupported = 13;
 
   if (argc != kMaxArgSupported) {
@@ -55,7 +55,7 @@ int main(const int argc, const char* const argv[]) {
   const auto pkt_gen = std::make_unique<Packet_Generator>();
 
   const auto out_data = pkt_gen->GeneratePacket(
-      protocol, reinterpret_cast<const uint8_t*>(payload.c_str()),
+      protocol, reinterpret_cast<const uint8_t *>(payload.c_str()),
       payload.size(), src_addr, dst_addr, src_port, dst_port);
 
   if (out_data.get()) {

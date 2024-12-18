@@ -95,7 +95,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), sizeof(tcphdr) + data_len, source_ip, dest_ip,
-                   IPPROTO_TCP);  // FIXME
+                   IPPROTO_TCP); // FIXME
 
   /* Generate TCP header */
   auto *tcp_header = reinterpret_cast<tcphdr *>(packet.get() + sizeof(ip));
@@ -143,13 +143,13 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), sizeof(udphdr) + data_len, source_ip, dest_ip,
-                   IPPROTO_UDP);  // FIXME
+                   IPPROTO_UDP); // FIXME
 
   /* Generate UDP header */
   auto *udp_header = reinterpret_cast<udphdr *>(packet.get() + sizeof(ip));
   udp_header->source = htons(source_port);
   udp_header->dest = htons(dest_port);
-  udp_header->len = htons(sizeof(udphdr) + data_len);  // FIXME
+  udp_header->len = htons(sizeof(udphdr) + data_len); // FIXME
   udp_header->check = CheckSum(reinterpret_cast<uint16_t *>(udp_header),
                                sizeof(udphdr) + data_len);
 

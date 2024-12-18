@@ -15,8 +15,7 @@
  * @param buf The pointer to be checked.
  * @return true if the pointer is not null, false otherwise.
  */
-template <typename T>
-bool NullPtrCheck(T buf) {
+template <typename T> bool NullPtrCheck(T buf) {
   return ((buf != nullptr) ? true : false);
 }
 
