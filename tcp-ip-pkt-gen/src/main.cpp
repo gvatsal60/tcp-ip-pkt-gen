@@ -5,7 +5,6 @@
 
 #include <cassert>
 #include <iostream>
-#include <memory>
 
 #include "packet_gen.hpp"
 #include "utils.hpp"

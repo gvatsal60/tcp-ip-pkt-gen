@@ -1,18 +1,17 @@
-FROM mcr.microsoft.com/devcontainers/cpp:latest AS base
+FROM mcr.microsoft.com/devcontainers/cpp:debian AS base
 
 # Metadata indicating the maintainer of this Dockerfile
 LABEL MAINTAINER="gvatsal60"
 # Description of the purpose of this image
 LABEL DESCRIPTION="Build Environment"
 
-ARG USERNAME=vscode
-
-ARG GTEST_DEST=/opt/gtest
-
 # Install dependencies
+RUN curl --proto "=https" --tlsv1.2 -sSf -L https://deb.nodesource.com/setup_lts.x | bash -
+
 RUN apt-get update \
   && apt-get -y install --no-install-recommends \
   bear \
+  nodejs \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
@@ -22,6 +21,7 @@ ARG GTEST_VER=1.15.2
 ARG GTEST_TAR_VER=v${GTEST_VER}.tar.gz
 ARG GTEST_BUILD_DIR=googletest-${GTEST_VER}/build
 ARG GTEST_SRC=/usr/local/src
+ARG GTEST_DEST=/opt/gtest
 
 # Download and extract gtest source code using ADD
 ADD https://github.com/google/googletest/archive/${GTEST_TAR_VER} ${GTEST_SRC}
@@ -43,4 +43,5 @@ FROM base AS build
 COPY --from=gtest ${GTEST_DEST} /
 
 # Switch to non-root user
+ARG USERNAME=vscode
 USER ${USERNAME}

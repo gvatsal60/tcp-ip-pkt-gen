@@ -3,7 +3,6 @@
 #define PACKET_GEN_HPP
 
 #include <memory>
-#include <string>
 #include <string_view>
 
 /**
