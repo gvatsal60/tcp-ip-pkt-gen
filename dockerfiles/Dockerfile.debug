@@ -6,9 +6,8 @@ LABEL MAINTAINER="gvatsal60"
 LABEL DESCRIPTION="Build Environment"
 
 # Install dependencies
-RUN curl --proto "=https" --tlsv1.2 -sSf -L https://deb.nodesource.com/setup_lts.x | bash -
-
-RUN apt-get update \
+RUN curl --proto "=https" --tlsv1.2 -sSf -L https://deb.nodesource.com/setup_lts.x | bash - \
+  && apt-get update \
   && apt-get -y install --no-install-recommends \
   bear \
   nodejs \

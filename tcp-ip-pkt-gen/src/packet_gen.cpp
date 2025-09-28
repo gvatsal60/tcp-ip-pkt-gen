@@ -18,7 +18,7 @@
  * @param length Length of the data buffer in bytes.
  * @return The calculated checksum value.
  */
-uint16_t Packet_Generator::CheckSum(const uint16_t *data, size_t length) {
+uint16_t Packet_Generator::CheckSum(const uint16_t *data, size_t length) const {
   uint32_t sum = 0;
 
   while (length > 1) {

@@ -3,7 +3,9 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://img.shields.io/github/license/gvatsal60/tcp-ip-pkt-gen)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/gvatsal60/tcp-ip-pkt-gen/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gvatsal60_tcp-ip-pkt-gen&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gvatsal60_tcp-ip-pkt-gen)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-green.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/graphs/commit-activity)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a3fcc2ca3efc42819b0c891adc2b39ec)](https://app.codacy.com/gh/gvatsal60/tcp-ip-pkt-gen/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![CodeFactor](https://www.codefactor.io/repository/github/gvatsal60/tcp-ip-pkt-gen/badge)](https://www.codefactor.io/repository/github/gvatsal60/tcp-ip-pkt-gen)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/gvatsal60/tcp-ip-pkt-gen/master.svg)](https://results.pre-commit.ci/latest/github/gvatsal60/tcp-ip-pkt-gen/master)
 [![GitHub pull-requests](https://img.shields.io/github/issues-pr/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/pull/)
 [![GitHub issues](https://img.shields.io/github/issues/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/issues/)
 [![GitHub forks](https://img.shields.io/github/forks/gvatsal60/tcp-ip-pkt-gen.svg)](https://GitHub.com/gvatsal60/tcp-ip-pkt-gen/network/)
@@ -55,4 +57,4 @@ Contributions are welcome! If you have suggestions for improvements, bug fixes, 
 
 ## License
 
-This project is licensed under the [Apache License](https://github.com/gvatsal60/tcp-ip-pkt-gen/blob/master/LICENSE).
+This project is licensed under the Apache 2.0 License. See [LICENSE](LICENSE) for details.
