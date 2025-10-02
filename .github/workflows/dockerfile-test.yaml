@@ -15,8 +15,12 @@ jobs:
         env:
           IMAGE_NAME: ${{ github.repository_owner }}/github-test
         run: |
-          for file in $(find . -maxdepth 1 -type f -name 'Dockerfile*'); do
-            tag=$(basename "$file" | sed 's/Dockerfile\.//')
-            tag=${tag:-default}
-            docker build -f "$file" -t "$IMAGE_NAME:$tag" .
+          for file in $(find dockerfiles -type f -name 'Dockerfile*'); do
+              filename=$(basename "$file")
+              if [ "$filename" = "Dockerfile" ]; then
+                tag="default"
+              else
+                tag="${filename#Dockerfile.}"
+              fi
+              docker build -f "$file" -t "$IMAGE_NAME:$tag" "$(dirname "$file")"
           done
