@@ -49,7 +49,7 @@ void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
                                         const uint32_t data_len,
                                         const uint32_t source_ip,
                                         const uint32_t dest_ip,
-                                        const uint16_t protocol) const {
+                                        const uint16_t protocol) {
   auto *ip_header = reinterpret_cast<ip *>(packet);
   ip_header->ip_v = 4;
   ip_header->ip_hl = 5;
