@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
+#include <print>
 
 /**
  * @brief NullPtrCheck checks if a pointer is not null.

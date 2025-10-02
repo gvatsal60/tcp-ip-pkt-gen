@@ -16,7 +16,7 @@ RUN curl --proto "=https" --tlsv1.2 -sSf -L https://deb.nodesource.com/setup_lts
 
 # Install gtest from source
 FROM base AS gtest
-ARG GTEST_VER=1.15.2
+ARG GTEST_VER=1.17.0
 ARG GTEST_TAR_VER=v${GTEST_VER}.tar.gz
 ARG GTEST_BUILD_DIR=googletest-${GTEST_VER}/build
 ARG GTEST_SRC=/usr/local/src
