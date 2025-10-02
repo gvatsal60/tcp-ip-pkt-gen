@@ -29,26 +29,32 @@ RUN apk update && \
   # Create a non-root user
   adduser -D nonroot
 
-# Install gtest
+# Install gtest from source
 FROM base AS gtest
-ARG GTEST_VER=v1.14.0
-RUN set -x && \
-  SRC=/usr/local/src/google-test-${GTEST_VER} && \
-  mkdir -p "$SRC" && cd "$SRC" && \
-  # Download and extract gtest source code
-  curl --proto '=https' --tlsv1.2 -sSL https://github.com/google/googletest/archive/${GTEST_VER}.tar.gz \
-  | tar xz -C "$SRC" --strip-components=1 && \
-  # Create build directory and compile gtest
-  mkdir build && \
-  cd build && \
-  cmake .. && \
-  make -j8 && make install DESTDIR=/opt/gtest
+ARG GTEST_VER=1.17.0
+ARG GTEST_TAR_VER=v${GTEST_VER}.tar.gz
+ARG GTEST_BUILD_DIR=googletest-${GTEST_VER}/build
+ARG GTEST_SRC=/usr/local/src
+ARG GTEST_DEST=/opt/gtest
+
+# Download and extract gtest source code using ADD
+ADD https://github.com/google/googletest/archive/${GTEST_TAR_VER} ${GTEST_SRC}
+
+# Extract gtest source code, build directory, compile, and install gtest
+RUN set -x \
+  && tar -xzvf ${GTEST_SRC}/${GTEST_TAR_VER} -C ${GTEST_SRC} \
+  && mkdir -p ${GTEST_SRC}/${GTEST_BUILD_DIR} \
+  && cd ${GTEST_SRC}/${GTEST_BUILD_DIR} \
+  && cmake .. \
+  && make -j$(nproc) \
+  && make install DESTDIR=${GTEST_DEST} \
+  && rm -rf ${GTEST_SRC}/${GTEST_VER}
 
 # Build Final Image
 FROM base AS build
 
 # Copy gtest binaries from the gtest stage
-COPY --from=gtest /opt/gtest /
+COPY --from=gtest ${GTEST_DEST} /
 
 # Set environment variables for locale
 ENV LC_ALL=en_US.UTF-8
