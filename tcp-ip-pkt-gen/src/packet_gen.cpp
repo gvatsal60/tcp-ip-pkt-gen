@@ -7,7 +7,6 @@
 #include <unistd.h>
 
 #include <cstring>
-#include <memory>
 
 /**
  * @brief Calculate checksum for a given data buffer.
@@ -19,7 +18,7 @@
  * @param length Length of the data buffer in bytes.
  * @return The calculated checksum value.
  */
-uint16_t Packet_Generator::CheckSum(const uint16_t *data, size_t length) {
+uint16_t Packet_Generator::CheckSum(const uint16_t *data, size_t length) const {
   uint32_t sum = 0;
 
   while (length > 1) {
@@ -50,7 +49,7 @@ void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
                                         const uint32_t data_len,
                                         const uint32_t source_ip,
                                         const uint32_t dest_ip,
-                                        const uint16_t protocol) {
+                                        const uint16_t protocol) const {
   auto *ip_header = reinterpret_cast<ip *>(packet);
   ip_header->ip_v = 4;
   ip_header->ip_hl = 5;

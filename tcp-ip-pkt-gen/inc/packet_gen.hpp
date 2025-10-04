@@ -3,7 +3,6 @@
 #define PACKET_GEN_HPP
 
 #include <memory>
-#include <string>
 #include <string_view>
 
 /**
@@ -26,7 +25,7 @@ public:
 private:
   void GenerateIpHeader(uint8_t *const packet, const uint32_t data_len,
                         const uint32_t source_ip, const uint32_t dest_ip,
-                        const uint16_t protocol);
+                        const uint16_t protocol) const;
   std::unique_ptr<uint8_t[]>
   GenerateTcpIpPacket(const uint8_t *const data, const size_t data_len,
                       const uint32_t source_ip, const uint32_t dest_ip,
@@ -35,7 +34,7 @@ private:
   GenerateUdpIpPacket(const uint8_t *const data, const size_t data_len,
                       const uint32_t source_ip, const uint32_t dest_ip,
                       const uint16_t source_port, const uint16_t dest_port);
-  uint16_t CheckSum(const uint16_t *data, size_t length);
+  uint16_t CheckSum(const uint16_t *data, size_t length) const;
 
   /* Default window size for TCP packets. */
   const uint32_t DEFAULT_WINDOW_SIZE = 65535;
