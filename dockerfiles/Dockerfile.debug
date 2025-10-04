@@ -39,7 +39,7 @@ RUN set -x \
 FROM base AS build
 
 # Copy gtest binaries from the gtest stage
-COPY --from=gtest ${GTEST_DEST} /
+COPY --from=gtest "${GTEST_DEST}" /
 
 # Switch to non-root user
 ARG USERNAME=vscode
