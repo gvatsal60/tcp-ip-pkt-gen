@@ -32,7 +32,7 @@ RUN set -x \
   && cd ${GTEST_SRC}/${GTEST_BUILD_DIR} \
   && cmake .. \
   && make -j$(nproc) \
-  && make install DESTDIR=${GTEST_DEST} \
+  && make install DESTDIR="${GTEST_DEST}" \
   && rm -rf ${GTEST_SRC}/${GTEST_VER}
 
 # Build Final Image
