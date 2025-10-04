@@ -27,10 +27,10 @@ ADD https://github.com/google/googletest/archive/${GTEST_TAR_VER} ${GTEST_SRC}
 
 # Extract gtest source code, build directory, compile, and install gtest
 RUN set -x \
-  # && tar -xzvf ${GTEST_SRC}/${GTEST_TAR_VER} -C ${GTEST_SRC} \
+  && tar -xzvf ${GTEST_SRC}/${GTEST_TAR_VER} -C ${GTEST_SRC} \
   && mkdir -p ${GTEST_SRC}/${GTEST_BUILD_DIR} \
   && cd ${GTEST_SRC}/${GTEST_BUILD_DIR} \
-  && cmake \
+  && cmake .. \
   && make -j$(nproc) \
   && make install DESTDIR=${GTEST_DEST} \
   && rm -rf ${GTEST_SRC}/${GTEST_VER}
