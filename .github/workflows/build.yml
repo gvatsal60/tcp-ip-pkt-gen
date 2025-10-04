@@ -34,3 +34,8 @@ jobs:
         run: make build
       - name: Test
         run: make test
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tcp_ip_pkt_gen
+          path: tcp-ip-pkt-gen/tcp-ip-pkt-gen/bin/debugBin
