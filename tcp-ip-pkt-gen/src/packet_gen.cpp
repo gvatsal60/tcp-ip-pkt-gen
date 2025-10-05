@@ -46,10 +46,10 @@ uint16_t Packet_Generator::CheckSum(const uint16_t *data, size_t length) const {
  * @param protocol The IP protocol to use for the packet.
  */
 void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
-                                        const uint32_t data_len,
-                                        const uint32_t source_ip,
-                                        const uint32_t dest_ip,
-                                        const uint16_t protocol) const {
+    const uint32_t data_len,
+    const uint32_t source_ip,
+    const uint32_t dest_ip,
+    const uint16_t protocol) const {
   auto *ip_header = reinterpret_cast<ip *>(packet);
   ip_header->ip_v = 4;
   ip_header->ip_hl = 5;
@@ -79,11 +79,11 @@ void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
  * @return A unique pointer to the generated packet buffer.
  */
 std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(const uint8_t *const data,
-                                                                 const size_t data_len,
-                                                                 const uint32_t source_ip,
-                                                                 const uint32_t dest_ip,
-                                                                 const uint16_t source_port,
-                                                                 const uint16_t dest_port) const {
+    const size_t data_len,
+    const uint32_t source_ip,
+    const uint32_t dest_ip,
+    const uint16_t source_port,
+    const uint16_t dest_port) const {
   std::unique_ptr<uint8_t[]> packet{nullptr};
 
   /* Calculate packet size */
@@ -95,7 +95,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(const uint8_t *
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), sizeof(tcphdr) + data_len, source_ip, dest_ip,
-                   IPPROTO_TCP);  // FIXME
+      IPPROTO_TCP);  // FIXME
 
   /* Generate TCP header */
   auto *tcp_header = reinterpret_cast<tcphdr *>(packet.get() + sizeof(ip));
@@ -128,11 +128,11 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(const uint8_t *
  * @return A unique pointer to the generated packet buffer.
  */
 std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(const uint8_t *const data,
-                                                                 const size_t data_len,
-                                                                 const uint32_t source_ip,
-                                                                 const uint32_t dest_ip,
-                                                                 const uint16_t source_port,
-                                                                 const uint16_t dest_port) const {
+    const size_t data_len,
+    const uint32_t source_ip,
+    const uint32_t dest_ip,
+    const uint16_t source_port,
+    const uint16_t dest_port) const {
   std::unique_ptr<uint8_t[]> packet{nullptr};
 
   /* Calculate packet size */
@@ -144,7 +144,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(const uint8_t *
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), sizeof(udphdr) + data_len, source_ip, dest_ip,
-                   IPPROTO_UDP);  // FIXME
+      IPPROTO_UDP);  // FIXME
 
   /* Generate UDP header */
   auto *udp_header = reinterpret_cast<udphdr *>(packet.get() + sizeof(ip));
@@ -175,12 +175,12 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(const uint8_t *
  * @return A unique pointer to the generated packet buffer.
  */
 std::unique_ptr<uint8_t[]> Packet_Generator::GeneratePacket(const std::string_view protocol,
-                                                            const uint8_t *const data,
-                                                            const size_t data_len,
-                                                            const uint32_t source_ip,
-                                                            const uint32_t dest_ip,
-                                                            const uint16_t source_port,
-                                                            const uint16_t dest_port) const {
+    const uint8_t *const data,
+    const size_t data_len,
+    const uint32_t source_ip,
+    const uint32_t dest_ip,
+    const uint16_t source_port,
+    const uint16_t dest_port) const {
   std::unique_ptr<uint8_t[]> ret_ptr{nullptr};
 
   if (!data || !data_len || !source_ip || !dest_ip || !source_port || !dest_port) {
