@@ -27,7 +27,8 @@ inline void PrintUsage(const char *program_name) {
             << std::endl;
 }
 
-bool ParseArguments(int argc, const char *const argv[], PktArguments &pkt_args) {
+bool ParseArguments(int argc, const char *const argv[],
+                    PktArguments &pkt_args) {
   constexpr int kMaxArgSupported = 13;
   if (argc != kMaxArgSupported) {
     return false;
@@ -59,7 +60,6 @@ bool ParseArguments(int argc, const char *const argv[], PktArguments &pkt_args) 
 
   return true;
 }
-
 
 int main(const int argc, const char *const argv[]) {
   PktArguments pkt_args{};

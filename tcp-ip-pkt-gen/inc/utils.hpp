@@ -31,7 +31,8 @@ template <typename T> bool NullPtrCheck(T buf) {
  * @param len The length of the buffer, in bytes.
  * @param prefix Boolean flag indicating whether to prefix each byte with "0x".
  */
-inline void PrintFormattedHex(const uint8_t *buf, const uint32_t len, const bool prefix) {
+inline void PrintFormattedHex(const uint8_t *buf, const uint32_t len,
+                              const bool prefix) {
   for (uint32_t i = 0; i < len; ++i) {
     if (prefix) {
       printf("0x%02x ", buf[i]);
@@ -53,7 +54,8 @@ inline void PrintFormattedHex(const uint8_t *buf, const uint32_t len, const bool
  * This function prints the contents of a buffer in two styles of hexadecimal
  * format to the standard output. The first format includes a "0x" prefix for
  * each byte, and the second format omits the prefix for verification purposes.
- * Each byte is separated by a space, and a newline is printed after every 8 bytes.
+ * Each byte is separated by a space, and a newline is printed after every 8
+ * bytes.
  *
  * @param buf Pointer to the buffer containing the bytes to be printed.
  * @param len The length of the buffer, in bytes.
@@ -62,7 +64,8 @@ inline void PrintHexBuffer(const uint8_t *const buf, const uint32_t len) {
   printf("\n---------- Generated Hex Packet ----------\n");
   PrintFormattedHex(buf, len, true);
 
-  printf("\n---------- Verify Hex Packet (https://hpd.gasmi.net/) ----------\n");
+  printf(
+      "\n---------- Verify Hex Packet (https://hpd.gasmi.net/) ----------\n");
   PrintFormattedHex(buf, len, false);
 }
 
