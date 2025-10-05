@@ -90,7 +90,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
 
   /* Allocate memory for packet */
   packet.reset(new uint8_t[packet_size]);
-  memset(packet.get(), 0, packet_size);
+  std::fill_n(packet.get(), packet_size, 0);
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), sizeof(tcphdr) + data_len, source_ip, dest_ip,
@@ -138,7 +138,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
 
   /* Allocate memory for packet */
   packet.reset(new uint8_t[packet_size]);
-  memset(packet.get(), 0, packet_size);
+  std::fill_n(packet.get(), packet_size, 0);
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), sizeof(udphdr) + data_len, source_ip, dest_ip,
