@@ -61,12 +61,15 @@ int main(const int argc, const char *const argv[]) {
 
   const auto pkt_gen = std::make_unique<Packet_Generator>();
 
-  const auto out_data =
-      pkt_gen->GeneratePacket(pkt_args.protocol, reinterpret_cast<const uint8_t *>(pkt_args.payload.c_str()),
-          pkt_args.payload.size(), pkt_args.src_addr, pkt_args.dst_addr, pkt_args.src_port, pkt_args.dst_port);
+  const auto out_data = pkt_gen->GeneratePacket(
+      pkt_args.protocol,
+      reinterpret_cast<const uint8_t *>(pkt_args.payload.c_str()),
+      pkt_args.payload.size(), pkt_args.src_addr, pkt_args.dst_addr,
+      pkt_args.src_port, pkt_args.dst_port);
 
   if (out_data.get()) {
-    PrintHexBuffer(out_data.get(), pkt_args.payload.size() + (sizeof(ip) + sizeof(tcphdr)));
+    PrintHexBuffer(out_data.get(),
+                   pkt_args.payload.size() + (sizeof(ip) + sizeof(tcphdr)));
   } else {
     printf("\nError: Something went wrong!!!\n");
   }
