@@ -30,7 +30,7 @@ template <typename T> bool NullPtrCheck(T buf) {
  * @param buf Pointer to the buffer containing the bytes to be printed.
  * @param len The length of the buffer, in bytes.
  */
-void PrintHexBuffer(const uint8_t *const buf, const uint32_t len) {
+inline void PrintHexBuffer(const uint8_t *const buf, const uint32_t len) {
   printf("\n---------- Generated Hex Packet ----------\n");
   size_t i = 0;
   for (i = 0; i < len; i++) {
