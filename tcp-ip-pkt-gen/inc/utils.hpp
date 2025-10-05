@@ -15,7 +15,8 @@
  * @param buf The pointer to be checked.
  * @return true if the pointer is not null, false otherwise.
  */
-template <typename T> bool NullPtrCheck(T buf) {
+template <typename T>
+bool NullPtrCheck(T buf) {
   return ((buf != nullptr) ? true : false);
 }
 
@@ -43,8 +44,7 @@ inline void PrintHexBuffer(const uint8_t *const buf, const uint32_t len) {
     printf("\n");
   }
 
-  printf(
-      "\n---------- Verify Hex Packet (https://hpd.gasmi.net/) ----------\n");
+  printf("\n---------- Verify Hex Packet (https://hpd.gasmi.net/) ----------\n");
   for (i = 0; i < len; i++) {
     printf("%02x ", buf[i]);
     if (i != 0 && ((i + 1) % 8) == 0) {

@@ -53,13 +53,11 @@ int main(const int argc, const char *const argv[]) {
 
   const auto pkt_gen = std::make_unique<Packet_Generator>();
 
-  const auto out_data = pkt_gen->GeneratePacket(
-      protocol, reinterpret_cast<const uint8_t *>(payload.c_str()),
-      payload.size(), src_addr, dst_addr, src_port, dst_port);
+  const auto out_data = pkt_gen->GeneratePacket(protocol, reinterpret_cast<const uint8_t *>(payload.c_str()),
+                                                payload.size(), src_addr, dst_addr, src_port, dst_port);
 
   if (out_data.get()) {
-    PrintHexBuffer(out_data.get(),
-                   payload.size() + (sizeof(ip) + sizeof(tcphdr)));
+    PrintHexBuffer(out_data.get(), payload.size() + (sizeof(ip) + sizeof(tcphdr)));
   } else {
     printf("\nError: Something went wrong!!!\n");
   }

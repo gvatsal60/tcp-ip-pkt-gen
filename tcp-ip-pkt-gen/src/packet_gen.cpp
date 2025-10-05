@@ -59,8 +59,7 @@ void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
   ip_header->ip_off = 0;
   ip_header->ip_ttl = 64;
   ip_header->ip_p = protocol;
-  ip_header->ip_sum =
-      CheckSum(reinterpret_cast<uint16_t *>(packet), sizeof(ip));
+  ip_header->ip_sum = CheckSum(reinterpret_cast<uint16_t *>(packet), sizeof(ip));
   ip_header->ip_src.s_addr = htonl(source_ip);
   ip_header->ip_dst.s_addr = htonl(dest_ip);
 }
@@ -79,10 +78,12 @@ void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
  * @param dest_port The destination port for the packet.
  * @return A unique pointer to the generated packet buffer.
  */
-std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
-    const uint8_t *const data, const size_t data_len, const uint32_t source_ip,
-    const uint32_t dest_ip, const uint16_t source_port,
-    const uint16_t dest_port) {
+std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(const uint8_t *const data,
+                                                                 const size_t data_len,
+                                                                 const uint32_t source_ip,
+                                                                 const uint32_t dest_ip,
+                                                                 const uint16_t source_port,
+                                                                 const uint16_t dest_port) {
   std::unique_ptr<uint8_t[]> packet{nullptr};
 
   /* Calculate packet size */
@@ -94,7 +95,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), sizeof(tcphdr) + data_len, source_ip, dest_ip,
-                   IPPROTO_TCP); // FIXME
+                   IPPROTO_TCP);  // FIXME
 
   /* Generate TCP header */
   auto *tcp_header = reinterpret_cast<tcphdr *>(packet.get() + sizeof(ip));
@@ -104,8 +105,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   tcp_header->ack_seq = 0;
   tcp_header->doff = 5;
   tcp_header->window = htons(DEFAULT_WINDOW_SIZE);
-  tcp_header->th_sum = CheckSum(reinterpret_cast<uint16_t *>(tcp_header),
-                                sizeof(tcphdr) + data_len);
+  tcp_header->th_sum = CheckSum(reinterpret_cast<uint16_t *>(tcp_header), sizeof(tcphdr) + data_len);
 
   /* Copy data into the packet */
   memcpy(packet.get() + (sizeof(ip) + sizeof(tcphdr)), data, data_len);
@@ -127,10 +127,12 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
  * @param dest_port The destination port for the packet.
  * @return A unique pointer to the generated packet buffer.
  */
-std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
-    const uint8_t *const data, const size_t data_len, const uint32_t source_ip,
-    const uint32_t dest_ip, const uint16_t source_port,
-    const uint16_t dest_port) {
+std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(const uint8_t *const data,
+                                                                 const size_t data_len,
+                                                                 const uint32_t source_ip,
+                                                                 const uint32_t dest_ip,
+                                                                 const uint16_t source_port,
+                                                                 const uint16_t dest_port) {
   std::unique_ptr<uint8_t[]> packet{nullptr};
 
   /* Calculate packet size */
@@ -142,15 +144,14 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), sizeof(udphdr) + data_len, source_ip, dest_ip,
-                   IPPROTO_UDP); // FIXME
+                   IPPROTO_UDP);  // FIXME
 
   /* Generate UDP header */
   auto *udp_header = reinterpret_cast<udphdr *>(packet.get() + sizeof(ip));
   udp_header->source = htons(source_port);
   udp_header->dest = htons(dest_port);
-  udp_header->len = htons(sizeof(udphdr) + data_len); // FIXME
-  udp_header->check = CheckSum(reinterpret_cast<uint16_t *>(udp_header),
-                               sizeof(udphdr) + data_len);
+  udp_header->len = htons(sizeof(udphdr) + data_len);  // FIXME
+  udp_header->check = CheckSum(reinterpret_cast<uint16_t *>(udp_header), sizeof(udphdr) + data_len);
 
   /* Copy data into the packet */
   memcpy(packet.get() + sizeof(ip) + sizeof(udphdr), data, data_len);
@@ -173,23 +174,23 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
  * @param dest_port The destination port for the packet.
  * @return A unique pointer to the generated packet buffer.
  */
-std::unique_ptr<uint8_t[]> Packet_Generator::GeneratePacket(
-    const std::string_view protocol, const uint8_t *const data,
-    const size_t data_len, const uint32_t source_ip, const uint32_t dest_ip,
-    const uint16_t source_port, const uint16_t dest_port) {
+std::unique_ptr<uint8_t[]> Packet_Generator::GeneratePacket(const std::string_view protocol,
+                                                            const uint8_t *const data,
+                                                            const size_t data_len,
+                                                            const uint32_t source_ip,
+                                                            const uint32_t dest_ip,
+                                                            const uint16_t source_port,
+                                                            const uint16_t dest_port) {
   std::unique_ptr<uint8_t[]> ret_ptr{nullptr};
 
-  if (!data || !data_len || !source_ip || !dest_ip || !source_port ||
-      !dest_port) {
+  if (!data || !data_len || !source_ip || !dest_ip || !source_port || !dest_port) {
     return ret_ptr;
   }
 
   if (protocol == "TCP") {
-    ret_ptr = GenerateTcpIpPacket(data, data_len, source_ip, dest_ip,
-                                  source_port, dest_port);
+    ret_ptr = GenerateTcpIpPacket(data, data_len, source_ip, dest_ip, source_port, dest_port);
   } else if (protocol == "UDP") {
-    ret_ptr = GenerateUdpIpPacket(data, data_len, source_ip, dest_ip,
-                                  source_port, dest_port);
+    ret_ptr = GenerateUdpIpPacket(data, data_len, source_ip, dest_ip, source_port, dest_port);
   }
 
   return ret_ptr;
