@@ -83,7 +83,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(const uint8_t *
                                                                  const uint32_t source_ip,
                                                                  const uint32_t dest_ip,
                                                                  const uint16_t source_port,
-                                                                 const uint16_t dest_port) {
+                                                                 const uint16_t dest_port) const {
   std::unique_ptr<uint8_t[]> packet{nullptr};
 
   /* Calculate packet size */
@@ -132,7 +132,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(const uint8_t *
                                                                  const uint32_t source_ip,
                                                                  const uint32_t dest_ip,
                                                                  const uint16_t source_port,
-                                                                 const uint16_t dest_port) {
+                                                                 const uint16_t dest_port) const {
   std::unique_ptr<uint8_t[]> packet{nullptr};
 
   /* Calculate packet size */
@@ -180,7 +180,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GeneratePacket(const std::string_vi
                                                             const uint32_t source_ip,
                                                             const uint32_t dest_ip,
                                                             const uint16_t source_port,
-                                                            const uint16_t dest_port) {
+                                                            const uint16_t dest_port) const {
   std::unique_ptr<uint8_t[]> ret_ptr{nullptr};
 
   if (!data || !data_len || !source_ip || !dest_ip || !source_port || !dest_port) {
