@@ -31,7 +31,7 @@ template <typename T> bool NullPtrCheck(T buf) {
  * @param len The length of the buffer, in bytes.
  * @param prefix Boolean flag indicating whether to prefix each byte with "0x".
  */
-inline void PrintFormattedHex(const uint8_t *buf, const uint32_t len,
+inline void PrintFormattedHex(const uint8_t *const buf, const uint32_t len,
                               const bool prefix) {
   for (uint32_t i = 0; i < len; ++i) {
     if (prefix) {
