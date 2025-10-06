@@ -88,7 +88,7 @@ int main(const int argc, const char *const argv[]) {
       pkt_args.payload.size(), pkt_args.src_addr, pkt_args.dst_addr,
       pkt_args.src_port, pkt_args.dst_port);
 
-  if (out_data.get()) {
+  if (out_data != nullptr) {
     PrintHexBuffer(out_data.get(),
                    pkt_args.payload.size() + (sizeof(ip) + sizeof(tcphdr)));
   } else {
