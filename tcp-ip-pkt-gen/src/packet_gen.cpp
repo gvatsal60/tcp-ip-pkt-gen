@@ -142,27 +142,35 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
     const uint16_t dest_port) const {
   std::unique_ptr<uint8_t[]> packet{nullptr};
 
-  /* Calculate packet size */
-  const auto packet_size = sizeof(ip) + sizeof(udphdr) + data_len;
+  /* Calculate sizes */
+  const size_t ip_header_size = sizeof(ip);
+  const size_t udp_header_size = sizeof(udphdr);
+  const size_t packet_size = ip_header_size + udp_header_size + data_len;
 
   /* Allocate memory for packet */
   packet.reset(new uint8_t[packet_size]);
   std::fill_n(packet.get(), packet_size, 0);
 
   /* Generate IP header */
-  GenerateIpHeader(packet.get(), sizeof(udphdr) + data_len, source_ip, dest_ip,
-                   IPPROTO_UDP); // FIXME
+  GenerateIpHeader(packet.get(), udp_header_size + data_len, source_ip, dest_ip,
+                   IPPROTO_UDP);
 
   /* Generate UDP header */
-  auto *udp_header = reinterpret_cast<udphdr *>(packet.get() + sizeof(ip));
+  auto *udp_header = reinterpret_cast<udphdr *>(packet.get() + ip_header_size);
   udp_header->source = htons(source_port);
   udp_header->dest = htons(dest_port);
-  udp_header->len = htons(sizeof(udphdr) + data_len); // FIXME
+  udp_header->len = htons(udp_header_size + data_len);
   udp_header->check = CheckSum(reinterpret_cast<uint16_t *>(udp_header),
-                               sizeof(udphdr) + data_len);
+                               udp_header_size + data_len);
 
-  /* Copy data into the packet */
-  memcpy(packet.get() + sizeof(ip) + sizeof(udphdr), data, data_len);
+  /* Copy payload data */
+  uint8_t *payload_start = packet.get() + ip_header_size + udp_header_size;
+  if (packet_size >= (payload_start - packet.get()) + data_len) {
+    memcpy(payload_start, data, data_len);
+  } else {
+    std::cerr << "Error: Packet buffer too small for payload." << std::endl;
+    return nullptr;
+  }
 
   return packet;
 }
