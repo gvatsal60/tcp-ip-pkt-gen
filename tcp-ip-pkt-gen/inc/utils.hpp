@@ -32,7 +32,6 @@ template <typename T> bool NullPtrCheck(T buf) {
  */
 inline void PrintFormattedHex(const uint8_t *const buf, const uint32_t len,
                               const bool prefix) {
-
   constexpr int kBytesPerLine = 8;
 
   for (uint32_t i = 0; i < len; ++i) {
