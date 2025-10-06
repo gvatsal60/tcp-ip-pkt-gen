@@ -27,10 +27,36 @@ inline void PrintUsage(const char *program_name) {
             << std::endl;
 }
 
+bool HandleArgument(const std::string &arg, const char *value,
+                    PktArguments &pkt_args) {
+  if (arg == "--source" || arg == "--src") {
+    if (inet_pton(AF_INET, value, &pkt_args.src_addr) != 1)
+      return false;
+    pkt_args.src_addr = ntohl(pkt_args.src_addr);
+  } else if (arg == "--destination" || arg == "--dst") {
+    if (inet_pton(AF_INET, value, &pkt_args.dst_addr) != 1)
+      return false;
+    pkt_args.dst_addr = ntohl(pkt_args.dst_addr);
+  } else if (arg == "--src_port") {
+    pkt_args.src_port = std::stoi(value);
+  } else if (arg == "--dst_port") {
+    pkt_args.dst_port = std::stoi(value);
+  } else if (arg == "--protocol") {
+    pkt_args.protocol = value;
+  } else if (arg == "--payload") {
+    pkt_args.payload = value;
+  } else {
+    std::cerr << "Invalid argument: " << arg << std::endl;
+    return false;
+  }
+
+  return true;
+}
+
 bool ParseArguments(int argc, const char *const argv[],
                     PktArguments &pkt_args) {
-  constexpr int kMaxArgSupported = 13;
-  if (argc != kMaxArgSupported) {
+
+  if (constexpr int kMaxArgSupported = 13; argc != kMaxArgSupported) {
     return false;
   }
 
@@ -38,22 +64,7 @@ bool ParseArguments(int argc, const char *const argv[],
     const std::string arg = argv[i];
     const char *value = argv[i + 1];
 
-    if ((arg == "--source") || (arg == "--src")) {
-      inet_pton(AF_INET, value, &pkt_args.src_addr);
-      pkt_args.src_addr = ntohl(pkt_args.src_addr);
-    } else if ((arg == "--destination") || (arg == "--dst")) {
-      inet_pton(AF_INET, value, &pkt_args.dst_addr);
-      pkt_args.dst_addr = ntohl(pkt_args.dst_addr);
-    } else if (arg == "--src_port") {
-      pkt_args.src_port = std::stoi(value);
-    } else if (arg == "--dst_port") {
-      pkt_args.dst_port = std::stoi(value);
-    } else if (arg == "--protocol") {
-      pkt_args.protocol = value;
-    } else if (arg == "--payload") {
-      pkt_args.payload = value;
-    } else {
-      std::cerr << "Invalid argument: " << arg << std::endl;
+    if (!HandleArgument(arg, value, pkt_args)) {
       return false;
     }
   }
