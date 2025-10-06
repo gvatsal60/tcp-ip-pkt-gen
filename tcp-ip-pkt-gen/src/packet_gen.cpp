@@ -112,7 +112,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   /* Copy payload data */
   uint8_t *payload_start = packet.get() + ip_header_size + tcp_header_size;
 
-  if (packet_size >= (payload_start - packet.get()) + data_len) {
+  if (packet_size >= (payload_start - packet.get()) + data_len) { // FIXME
     memcpy(payload_start, data, data_len);
   } else {
     std::cerr << "Error: Packet buffer too small for payload." << std::endl;
@@ -165,7 +165,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
 
   /* Copy payload data */
   uint8_t *payload_start = packet.get() + ip_header_size + udp_header_size;
-  if (packet_size >= (payload_start - packet.get()) + data_len) {
+  if (packet_size >= (payload_start - packet.get()) + data_len) { // FIXME
     memcpy(payload_start, data, data_len);
   } else {
     std::cerr << "Error: Packet buffer too small for payload." << std::endl;
