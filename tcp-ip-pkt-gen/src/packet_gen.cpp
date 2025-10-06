@@ -85,19 +85,21 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
     const uint16_t dest_port) const {
   std::unique_ptr<uint8_t[]> packet{nullptr};
 
-  /* Calculate packet size */
-  const auto packet_size = sizeof(ip) + sizeof(tcphdr) + data_len;
+  /* Calculate sizes */
+  const size_t ip_header_size = sizeof(ip);
+  const size_t tcp_header_size = sizeof(tcphdr);
+  const size_t packet_size = ip_header_size + tcp_header_size + data_len;
 
-  /* Allocate memory for packet */
+  /* Allocate and zero-initialize packet buffer */
   packet.reset(new uint8_t[packet_size]);
   std::fill_n(packet.get(), packet_size, 0);
 
   /* Generate IP header */
-  GenerateIpHeader(packet.get(), sizeof(tcphdr) + data_len, source_ip, dest_ip,
-                   IPPROTO_TCP); // FIXME
+  GenerateIpHeader(packet.get(), tcp_header_size + data_len, source_ip, dest_ip,
+                   IPPROTO_TCP);
 
   /* Generate TCP header */
-  auto *tcp_header = reinterpret_cast<tcphdr *>(packet.get() + sizeof(ip));
+  auto *tcp_header = reinterpret_cast<tcphdr *>(packet.get() + ip_header_size);
   tcp_header->source = htons(source_port);
   tcp_header->dest = htons(dest_port);
   tcp_header->seq = 0;
@@ -105,10 +107,17 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   tcp_header->doff = 5;
   tcp_header->window = htons(DEFAULT_WINDOW_SIZE);
   tcp_header->th_sum = CheckSum(reinterpret_cast<uint16_t *>(tcp_header),
-                                sizeof(tcphdr) + data_len);
+                                tcp_header_size + data_len);
 
-  /* Copy data into the packet */
-  memcpy(packet.get() + (sizeof(ip) + sizeof(tcphdr)), data, data_len);
+  /* Copy payload data */
+  uint8_t *payload_start = packet.get() + ip_header_size + tcp_header_size;
+
+  if (packet_size >= (payload_start - packet.get()) + data_len) {
+    memcpy(payload_start, data, data_len);
+  } else {
+    std::cerr << "Error: Packet buffer too small for payload." << std::endl;
+    return nullptr;
+  }
 
   return packet;
 }
