@@ -27,36 +27,46 @@ inline void PrintUsage(const char *program_name) {
             << std::endl;
 }
 
-int main(const int argc, const char *const argv[]) {
+bool ParseArguments(int argc, const char *const argv[],
+                    PktArguments &pkt_args) {
   constexpr int kMaxArgSupported = 13;
-
   if (argc != kMaxArgSupported) {
-    PrintUsage(argv[0]);
-    return 1;
+    return false;
   }
-
-  PktArguments pkt_args{};
 
   for (int i = 1; i < argc; i += 2) {
     const std::string arg = argv[i];
+    const char *value = argv[i + 1];
+
     if ((arg == "--source") || (arg == "--src")) {
-      inet_pton(AF_INET, argv[i + 1], &pkt_args.src_addr);
+      inet_pton(AF_INET, value, &pkt_args.src_addr);
       pkt_args.src_addr = ntohl(pkt_args.src_addr);
     } else if ((arg == "--destination") || (arg == "--dst")) {
-      inet_pton(AF_INET, argv[i + 1], &pkt_args.dst_addr);
+      inet_pton(AF_INET, value, &pkt_args.dst_addr);
       pkt_args.dst_addr = ntohl(pkt_args.dst_addr);
     } else if (arg == "--src_port") {
-      pkt_args.src_port = std::stoi(argv[i + 1]);
+      pkt_args.src_port = std::stoi(value);
     } else if (arg == "--dst_port") {
-      pkt_args.dst_port = std::stoi(argv[i + 1]);
+      pkt_args.dst_port = std::stoi(value);
     } else if (arg == "--protocol") {
-      pkt_args.protocol = argv[i + 1];
+      pkt_args.protocol = value;
     } else if (arg == "--payload") {
-      pkt_args.payload = argv[i + 1];
+      pkt_args.payload = value;
     } else {
       std::cerr << "Invalid argument: " << arg << std::endl;
-      return 1;
+      return false;
     }
+  }
+
+  return true;
+}
+
+int main(const int argc, const char *const argv[]) {
+  PktArguments pkt_args{};
+
+  if (!ParseArguments(argc, argv, pkt_args)) {
+    PrintUsage(argv[0]);
+    return 1;
   }
 
   const auto pkt_gen = std::make_unique<Packet_Generator>();
@@ -71,7 +81,7 @@ int main(const int argc, const char *const argv[]) {
     PrintHexBuffer(out_data.get(),
                    pkt_args.payload.size() + (sizeof(ip) + sizeof(tcphdr)));
   } else {
-    printf("\nError: Something went wrong!!!\n");
+    std::cerr << "\nError: Something went wrong!!!\n";
   }
 
   return 0;
