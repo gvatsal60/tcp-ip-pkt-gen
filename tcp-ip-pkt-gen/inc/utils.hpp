@@ -2,7 +2,6 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include <cstddef>
 #include <cstdint>
 #include <cstdio>
 
@@ -33,17 +32,20 @@ template <typename T> bool NullPtrCheck(T buf) {
  */
 inline void PrintFormattedHex(const uint8_t *const buf, const uint32_t len,
                               const bool prefix) {
+
+  constexpr int kBytesPerLine = 8;
+
   for (uint32_t i = 0; i < len; ++i) {
     if (prefix) {
       printf("0x%02x ", buf[i]);
     } else {
       printf("%02x ", buf[i]);
     }
-    if ((i + 1) % 8 == 0) {
+    if ((i + 1) % kBytesPerLine == 0) {
       printf("\n");
     }
   }
-  if (len % 8 != 0) {
+  if (len % kBytesPerLine != 0) {
     printf("\n");
   }
 }
