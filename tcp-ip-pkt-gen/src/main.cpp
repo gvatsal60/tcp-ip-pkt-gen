@@ -55,7 +55,6 @@ bool HandleArgument(const std::string &arg, const char *value,
 
 bool ParseArguments(int argc, const char *const argv[],
                     PktArguments &pkt_args) {
-
   if (constexpr int kMaxArgSupported = 13; argc != kMaxArgSupported) {
     return false;
   }
