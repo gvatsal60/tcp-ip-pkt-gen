@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include <cstring>
+#include <iostream>
 
 /**
  * @brief Calculate checksum for a given data buffer.
