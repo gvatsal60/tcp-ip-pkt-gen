@@ -84,7 +84,7 @@ repos:
       - id: codespell
   # Checkmake for linting Makefiles
   - repo: https://github.com/mrtazz/checkmake
-    rev: "0.2.2"
+    rev: "v0.3.0"
     hooks:
       - id: checkmake
   # Gitleaks for detecting secrets in Git repositories
