@@ -14,6 +14,7 @@
         "Tyriar.sort-lines",
         "bradzacher.vscode-copy-filename",
         "esbenp.prettier-vscode",
+        "eshojaei.mbake-makefile-formatter",
         "llvm-vs-code-extensions.vscode-clangd",
         "ms-azuretools.vscode-docker",
         "streetsidesoftware.code-spell-checker",
