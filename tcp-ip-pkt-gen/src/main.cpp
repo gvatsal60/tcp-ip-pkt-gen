@@ -55,8 +55,9 @@ bool HandleArgument(const std::string &arg, const char *value,
 
 bool ParseArguments(int argc, const char *const argv[],
                     PktArguments &pkt_args) {
-  constexpr int kMaxArgSupported = 13;
-  if (argc != kMaxArgSupported) {
+  // The program expects 6 option-value pairs (12 arguments) plus the program name (1 argument), totaling 13.
+  constexpr int kExpectedArgumentCount = 13;
+  if (argc != kExpectedArgumentCount) {
     return false;
   }
 
