@@ -12,8 +12,8 @@
 /**
  * @brief Calculate checksum for a given data buffer.
  *
- * This function calculates the checksum for the given data buffer using the
- * one's complement sum method.
+ * This function calculates the checksum for the given
+ * data buffer using the one's complement sum method.
  *
  * @param data Pointer to the data buffer.
  * @param length Length of the data buffer in bytes.

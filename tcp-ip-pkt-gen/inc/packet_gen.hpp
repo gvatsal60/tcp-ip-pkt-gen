@@ -8,8 +8,8 @@
 /**
  * @brief Packet_Generator class for generating network packets.
  *
- * This class provides functionality to generate network packets with various
- * protocols.
+ * This class provides functionality to generate
+ * network packets with various protocols.
  */
 class Packet_Generator final {
 public:

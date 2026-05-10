@@ -7,6 +7,7 @@ MKDIR := mkdir -p
 RMDIR := rm -rf
 MV_DIR := mv -f
 
+TOP_DIR := $(shell git rev-parse --show-toplevel)
 INC_DIR := inc
 SRC_DIR := src
 TEST_DIR := test/src
@@ -47,7 +48,7 @@ clean:
 	@$(RMDIR) $(BUILD_DIR) $(BIN_DIR)
 
 sonar: clean
-	@bear --output ../compile_commands.json --append -- $(MAKE) build
+	@bear --output $(TOP_DIR)/compile_commands.json --append -- $(MAKE) build
 
 $(TARGET): $(OBJECTS)
 	@$(MKDIR) $(BIN_DIR)
