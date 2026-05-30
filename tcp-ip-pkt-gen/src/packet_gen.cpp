@@ -118,7 +118,9 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   if (payload_offset > packet_size || data_len > packet_size - payload_offset) {
     return nullptr;
   }
-  std::memcpy(payload_start, data, data_len);
+  for (size_t i = 0; i < data_len; ++i) {
+    payload_start[i] = data[i];
+  }
   tcp_header->th_sum =
       CheckSum(reinterpret_cast<const uint16_t *>(tcp_header),
                tcp_header_size + data_len);
@@ -172,7 +174,9 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
   if (payload_offset > packet_size || data_len > packet_size - payload_offset) {
     return nullptr;
   }
-  std::memcpy(payload_start, data, data_len);
+  for (size_t i = 0; i < data_len; ++i) {
+    payload_start[i] = data[i];
+  }
   udp_header->check =
       CheckSum(reinterpret_cast<const uint16_t *>(udp_header),
                udp_header_size + data_len);
