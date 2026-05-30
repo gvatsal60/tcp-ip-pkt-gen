@@ -7,7 +7,7 @@ MKDIR := mkdir -p
 RMDIR := rm -rf
 MV_DIR := mv -f
 
-TOP_DIR := $(shell git rev-parse --show-toplevel)
+TOP_DIR := $(shell git rev-parse --show-toplevel 2>/dev/null || pwd -P)
 INC_DIR := inc
 SRC_DIR := src
 TEST_DIR := test/src
