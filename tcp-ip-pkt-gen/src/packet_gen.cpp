@@ -6,7 +6,6 @@
 #include <netinet/udp.h>
 #include <unistd.h>
 
-#include <algorithm>
 #include <cstring>
 
 /**
@@ -87,6 +86,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
     const uint8_t *const data, const size_t data_len, const uint32_t source_ip,
     const uint32_t dest_ip, const uint16_t source_port,
     const uint16_t dest_port) const {
+  constexpr uint16_t kDefaultWindowSize = 65535;
 
   /* Calculate sizes */
   const size_t ip_header_size = sizeof(ip);
@@ -95,7 +95,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
 
   /* Allocate and zero-initialize packet buffer */
   auto packet = std::make_unique<uint8_t[]>(packet_size);
-  std::fill_n(packet.get(), packet_size, 0);
+  std::memset(packet.get(), 0, packet_size);
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), tcp_header_size + data_len, source_ip, dest_ip,
@@ -108,11 +108,16 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   tcp_header->seq = 0;
   tcp_header->ack_seq = 0;
   tcp_header->doff = 5;
-  tcp_header->window = htons(DEFAULT_WINDOW_SIZE);
+  tcp_header->window = htons(kDefaultWindowSize);
   tcp_header->th_sum = 0;
 
   /* Copy payload data */
   uint8_t *payload_start = packet.get() + ip_header_size + tcp_header_size;
+  const size_t payload_offset =
+      static_cast<size_t>(payload_start - packet.get());
+  if (payload_offset > packet_size || data_len > packet_size - payload_offset) {
+    return nullptr;
+  }
   std::memcpy(payload_start, data, data_len);
   tcp_header->th_sum =
       CheckSum(reinterpret_cast<const uint16_t *>(tcp_header),
@@ -147,7 +152,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
 
   /* Allocate memory for packet */
   auto packet = std::make_unique<uint8_t[]>(packet_size);
-  std::fill_n(packet.get(), packet_size, 0);
+  std::memset(packet.get(), 0, packet_size);
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), udp_header_size + data_len, source_ip, dest_ip,
@@ -162,6 +167,11 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
 
   /* Copy payload data */
   uint8_t *payload_start = packet.get() + ip_header_size + udp_header_size;
+  const size_t payload_offset =
+      static_cast<size_t>(payload_start - packet.get());
+  if (payload_offset > packet_size || data_len > packet_size - payload_offset) {
+    return nullptr;
+  }
   std::memcpy(payload_start, data, data_len);
   udp_header->check =
       CheckSum(reinterpret_cast<const uint16_t *>(udp_header),
