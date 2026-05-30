@@ -1,7 +1,10 @@
 #include <gtest/gtest.h>
 
 #include <arpa/inet.h>
+#include <cstddef>
+#include <cstdint>
 #include <cstring>
+#include <memory>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
