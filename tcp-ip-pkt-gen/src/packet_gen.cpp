@@ -7,13 +7,12 @@
 #include <unistd.h>
 
 #include <cstring>
-#include <iostream>
 
 /**
  * @brief Calculate checksum for a given data buffer.
  *
- * This function calculates the checksum for the given data buffer using the
- * one's complement sum method.
+ * This function calculates the checksum for the given
+ * data buffer using the one's complement sum method.
  *
  * @param data Pointer to the data buffer.
  * @param length Length of the data buffer in bytes.
@@ -27,7 +26,8 @@ uint16_t Packet_Generator::CheckSum(const uint16_t *data, size_t length) const {
     length -= 2;
   }
   if (length > 0) {
-    sum += *(uint8_t *)data;
+    const auto *byte_data = reinterpret_cast<const uint8_t *>(data);
+    sum += *byte_data;
   }
   while (sum >> 16) {
     sum = (sum & 0xFFFF) + (sum >> 16);
@@ -47,7 +47,7 @@ uint16_t Packet_Generator::CheckSum(const uint16_t *data, size_t length) const {
  * @param protocol The IP protocol to use for the packet.
  */
 void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
-                                        const uint32_t data_len,
+                                        const size_t data_len,
                                         const uint32_t source_ip,
                                         const uint32_t dest_ip,
                                         const uint16_t protocol) const {
@@ -55,15 +55,17 @@ void Packet_Generator::GenerateIpHeader(uint8_t *const packet,
   ip_header->ip_v = 4;
   ip_header->ip_hl = 5;
   ip_header->ip_tos = 0;
-  ip_header->ip_len = htons(sizeof(ip) + data_len);
-  ip_header->ip_id = htons(getpid());
+  ip_header->ip_len = htons(static_cast<uint16_t>(sizeof(ip) + data_len));
+  ip_header->ip_id = htons(static_cast<uint16_t>(getpid()));
   ip_header->ip_off = 0;
   ip_header->ip_ttl = 64;
   ip_header->ip_p = protocol;
-  ip_header->ip_sum =
-      CheckSum(reinterpret_cast<uint16_t *>(packet), sizeof(ip));
   ip_header->ip_src.s_addr = htonl(source_ip);
   ip_header->ip_dst.s_addr = htonl(dest_ip);
+
+  ip_header->ip_sum = 0;
+  ip_header->ip_sum =
+      CheckSum(reinterpret_cast<const uint16_t *>(packet), sizeof(ip));
 }
 
 /**
@@ -84,7 +86,7 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
     const uint8_t *const data, const size_t data_len, const uint32_t source_ip,
     const uint32_t dest_ip, const uint16_t source_port,
     const uint16_t dest_port) const {
-  std::unique_ptr<uint8_t[]> packet{nullptr};
+  constexpr uint16_t kDefaultWindowSize = 65535;
 
   /* Calculate sizes */
   const size_t ip_header_size = sizeof(ip);
@@ -92,8 +94,8 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   const size_t packet_size = ip_header_size + tcp_header_size + data_len;
 
   /* Allocate and zero-initialize packet buffer */
-  packet.reset(new uint8_t[packet_size]);
-  std::fill_n(packet.get(), packet_size, 0);
+  auto packet = std::make_unique<uint8_t[]>(packet_size);
+  std::memset(packet.get(), 0, packet_size);
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), tcp_header_size + data_len, source_ip, dest_ip,
@@ -106,19 +108,21 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateTcpIpPacket(
   tcp_header->seq = 0;
   tcp_header->ack_seq = 0;
   tcp_header->doff = 5;
-  tcp_header->window = htons(DEFAULT_WINDOW_SIZE);
-  tcp_header->th_sum = CheckSum(reinterpret_cast<uint16_t *>(tcp_header),
-                                tcp_header_size + data_len);
+  tcp_header->window = htons(kDefaultWindowSize);
+  tcp_header->th_sum = 0;
 
   /* Copy payload data */
   uint8_t *payload_start = packet.get() + ip_header_size + tcp_header_size;
-
-  if (packet_size >= (payload_start - packet.get()) + data_len) { // FIXME
-    memcpy(payload_start, data, data_len);
-  } else {
-    std::cerr << "Error: Packet buffer too small for payload." << std::endl;
+  const size_t payload_offset =
+      static_cast<size_t>(payload_start - packet.get());
+  if (payload_offset > packet_size || data_len > packet_size - payload_offset) {
     return nullptr;
   }
+  for (size_t i = 0; i < data_len; ++i) {
+    payload_start[i] = data[i];
+  }
+  tcp_header->th_sum = CheckSum(reinterpret_cast<const uint16_t *>(tcp_header),
+                                tcp_header_size + data_len);
 
   return packet;
 }
@@ -141,7 +145,6 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
     const uint8_t *const data, const size_t data_len, const uint32_t source_ip,
     const uint32_t dest_ip, const uint16_t source_port,
     const uint16_t dest_port) const {
-  std::unique_ptr<uint8_t[]> packet{nullptr};
 
   /* Calculate sizes */
   const size_t ip_header_size = sizeof(ip);
@@ -149,8 +152,8 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
   const size_t packet_size = ip_header_size + udp_header_size + data_len;
 
   /* Allocate memory for packet */
-  packet.reset(new uint8_t[packet_size]);
-  std::fill_n(packet.get(), packet_size, 0);
+  auto packet = std::make_unique<uint8_t[]>(packet_size);
+  std::memset(packet.get(), 0, packet_size);
 
   /* Generate IP header */
   GenerateIpHeader(packet.get(), udp_header_size + data_len, source_ip, dest_ip,
@@ -160,18 +163,21 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GenerateUdpIpPacket(
   auto *udp_header = reinterpret_cast<udphdr *>(packet.get() + ip_header_size);
   udp_header->source = htons(source_port);
   udp_header->dest = htons(dest_port);
-  udp_header->len = htons(udp_header_size + data_len);
-  udp_header->check = CheckSum(reinterpret_cast<uint16_t *>(udp_header),
-                               udp_header_size + data_len);
+  udp_header->len = htons(static_cast<uint16_t>(udp_header_size + data_len));
+  udp_header->check = 0;
 
   /* Copy payload data */
   uint8_t *payload_start = packet.get() + ip_header_size + udp_header_size;
-  if (packet_size >= (payload_start - packet.get()) + data_len) { // FIXME
-    memcpy(payload_start, data, data_len);
-  } else {
-    std::cerr << "Error: Packet buffer too small for payload." << std::endl;
+  const size_t payload_offset =
+      static_cast<size_t>(payload_start - packet.get());
+  if (payload_offset > packet_size || data_len > packet_size - payload_offset) {
     return nullptr;
   }
+  for (size_t i = 0; i < data_len; ++i) {
+    payload_start[i] = data[i];
+  }
+  udp_header->check = CheckSum(reinterpret_cast<const uint16_t *>(udp_header),
+                               udp_header_size + data_len);
 
   return packet;
 }
@@ -195,20 +201,18 @@ std::unique_ptr<uint8_t[]> Packet_Generator::GeneratePacket(
     const std::string_view protocol, const uint8_t *const data,
     const size_t data_len, const uint32_t source_ip, const uint32_t dest_ip,
     const uint16_t source_port, const uint16_t dest_port) const {
-  std::unique_ptr<uint8_t[]> ret_ptr{nullptr};
-
-  if (!data || !data_len || !source_ip || !dest_ip || !source_port ||
-      !dest_port) {
-    return ret_ptr;
+  if (!data || data_len == 0 || source_ip == 0 || dest_ip == 0 ||
+      source_port == 0 || dest_port == 0) {
+    return nullptr;
   }
 
   if (protocol == "TCP") {
-    ret_ptr = GenerateTcpIpPacket(data, data_len, source_ip, dest_ip,
-                                  source_port, dest_port);
+    return GenerateTcpIpPacket(data, data_len, source_ip, dest_ip, source_port,
+                               dest_port);
   } else if (protocol == "UDP") {
-    ret_ptr = GenerateUdpIpPacket(data, data_len, source_ip, dest_ip,
-                                  source_port, dest_port);
+    return GenerateUdpIpPacket(data, data_len, source_ip, dest_ip, source_port,
+                               dest_port);
   }
 
-  return ret_ptr;
+  return nullptr;
 }
