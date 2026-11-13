@@ -40,3 +40,4 @@
 
 # SonarLint
 **/.sonarlint/*
+**/compile_commands.json
